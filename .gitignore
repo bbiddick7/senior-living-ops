@@ -1,0 +1,10 @@
+data/
+*.csv
+*.duckdb
+*.duckdb.wal
+__pycache__/
+*.pyc
+.venv/
+venv/
+.vscode/
+.DS_Store
