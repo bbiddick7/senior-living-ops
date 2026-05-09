@@ -12,8 +12,18 @@ st.title("Senior Living Operations Intelligence")
 st.caption("Peer-cohort staffing analysis using public CMS data")
 
 # Connect to the database (read-only since we're just querying)
-con = duckdb.connect("senior_living.duckdb", read_only=True)
+import os
 
+# In production (Streamlit Cloud), use the pre-built parquet file.
+# Locally, use the full DuckDB database if available.
+if os.path.exists("senior_living.duckdb"):
+    con = duckdb.connect("senior_living.duckdb", read_only=True)
+else:
+    con = duckdb.connect(":memory:")
+    con.execute("""
+        CREATE TABLE facility_peer_analysis AS 
+        SELECT * FROM 'deploy_data/facility_peer_analysis.parquet'
+    """)
 # ---- SIDEBAR FILTERS ----
 st.sidebar.header("Filters")
 
